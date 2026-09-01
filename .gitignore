@@ -1,0 +1,22 @@
+# Sistema operacional
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Dependências e arquivos temporários
+node_modules/
+*.log
+.cache/
+dist/
+
+# Configurações locais
+.env
+.env.*
+!.env.example
+
+# Configurações locais das ferramentas de desenvolvimento
+.agents/
+.claude/
+.codex/
+.impeccable/
+skills-lock.json
