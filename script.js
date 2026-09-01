@@ -32,6 +32,7 @@ function finishPreloader() {
     const exitDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 380;
 
     window.setTimeout(() => {
+      resetPagePosition();
       preloader.remove();
       document.documentElement.classList.remove("is-loading");
       window.requestAnimationFrame(() => window.requestAnimationFrame(startSite));
@@ -62,7 +63,11 @@ function resetPagePosition() {
 }
 
 resetPagePosition();
-window.addEventListener("pageshow", () => window.requestAnimationFrame(resetPagePosition));
+window.addEventListener("pageshow", () => {
+  resetPagePosition();
+  window.requestAnimationFrame(resetPagePosition);
+  window.setTimeout(resetPagePosition, 0);
+}, { once: true });
 
 const whatsappLinks = document.querySelectorAll(".js-whatsapp");
 const toast = document.querySelector(".toast");
