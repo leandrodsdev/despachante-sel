@@ -118,6 +118,8 @@ function removePreloader(immediate = false, onComplete) {
 
   window.clearTimeout(preloaderRemovalTimer);
   preloaderRemovalTimer = window.setTimeout(() => {
+    window.clearTimeout(window.__selPreloaderTimer);
+    window.clearTimeout(window.__selPreloaderLeaveTimer);
     preloader.classList.add("is-hidden");
     preloader.remove();
     if (onComplete) onComplete();
@@ -167,7 +169,7 @@ function startGsapAnimations() {
     return;
   }
 
-  const heroTimeline = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+  const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
   heroTimeline
     .fromTo(".hero-image", { scale: 1.07 }, { scale: 1, duration: 1.6 })
     .fromTo(".site-header", { autoAlpha: 0, y: -16 }, { autoAlpha: 1, y: 0, duration: 0.55, clearProps: "transform" }, 0.12)
@@ -182,7 +184,7 @@ function startGsapAnimations() {
     heroTimeline.fromTo(".scroll-cue", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.45 }, 0.72);
   }
 
-  removePreloader(false, () => heroTimeline.play(0));
+  removePreloader();
 
   function revealGroup(trigger, targets, from, options = {}) {
     const items = gsap.utils.toArray(targets);

@@ -2,7 +2,7 @@
 <html lang="pt-BR" class="no-js">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <meta name="description" content="SEL Marabá: documentação veicular para empresas, frotas e particulares. Licenciamento, transferência, emplacamento, ANTT e AET desde 1990.">
   <meta name="author" content="SEL Marabá">
   <meta name="robots" content="index, follow, max-image-preview:large">
@@ -31,12 +31,22 @@
   <meta name="twitter:image:alt" content="Caminhão vermelho na estrada representando os serviços veiculares da SEL Marabá">
   <title>SEL Marabá | Despachante Veicular desde 1990</title>
   <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <style>
+    /* Critical first paint: mantém o preloader centralizado antes do CSS externo. */
+    #sel-preloader{position:fixed!important;inset:0!important;z-index:9999;display:block!important;width:auto!important;height:auto!important;min-height:100vh;min-height:100svh;margin:0!important;background:#070707;color:#fff;overflow:hidden}
+    #sel-preloader .sel-loader-stage{position:absolute!important;inset:0!important;display:grid!important;place-content:center!important;justify-items:center!important;gap:28px;margin:0!important;padding:0!important;opacity:0!important;visibility:hidden!important;transform:none!important}
+    #sel-preloader.is-ready .sel-loader-stage{opacity:1!important;visibility:visible!important}
+    #sel-preloader .sel-loader-wordmark{position:relative!important;inset:auto!important;margin:0!important;font:700 clamp(3.4rem,8vw,6.2rem)/.9 Manrope,Arial,sans-serif;letter-spacing:-.04em;transform:none!important}
+    #sel-preloader .sel-loader-wordmark>span{position:absolute;top:-.02em;right:-.22em;width:.12em;aspect-ratio:1;border-radius:50%;background:#e5231f}
+    #sel-preloader .sel-loader-progress{position:relative!important;inset:auto!important;width:clamp(150px,24vw,260px);height:1px;margin:0!important;background:rgba(255,255,255,.18);overflow:hidden;transform:none!important}
+    #sel-preloader .sel-loader-progress i{display:block;width:100%;height:100%;background:#e5231f;transform:scaleX(0);transform-origin:left center}
+  </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preload" href="assets/hero-caminhao.webp" as="image" type="image/webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=4">
+  <link rel="stylesheet" href="styles.css?v=10">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -62,12 +72,21 @@
 <body>
   <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
-  <div class="preloader" role="status" aria-label="Carregando SEL Marabá">
-    <div class="preloader-inner" aria-hidden="true">
-      <div class="preloader-mark">SEL<span></span></div>
-      <div class="preloader-track"><i></i></div>
+  <div class="preloader" id="sel-preloader" role="status" aria-label="Carregando SEL Marabá">
+    <div class="sel-loader-stage" aria-hidden="true">
+      <div class="sel-loader-wordmark">SEL<span></span></div>
+      <div class="sel-loader-progress"><i></i></div>
     </div>
   </div>
+  <script>
+    (function(){
+      var loader=document.getElementById('sel-preloader');
+      if(!loader)return;
+      requestAnimationFrame(function(){requestAnimationFrame(function(){loader.classList.add('is-ready')})});
+      window.__selPreloaderLeaveTimer=window.setTimeout(function(){loader.classList.add('is-leaving')},1450);
+      window.__selPreloaderTimer=window.setTimeout(function(){if(loader.isConnected)loader.remove()},2200);
+    })();
+  </script>
 
   <header class="site-header" id="inicio">
     <div class="container nav-wrap">
@@ -271,6 +290,6 @@
   <div class="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
-  <script src="script.js?v=3" defer></script>
+  <script src="script.js?v=10" defer></script>
 </body>
 </html>
