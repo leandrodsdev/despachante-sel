@@ -194,7 +194,6 @@ function startGsapAnimations() {
 
   revealGroup(".services", ".services .section-head", { autoAlpha: 0, y: 28, clipPath: "inset(0 0 20% 0)" });
   revealGroup(".service-grid", ".service-card", { autoAlpha: 0, y: 48, scale: 0.97 }, { stagger: 0.075, start: "top 84%" });
-  revealGroup(".fleet", ".fleet-visual", { autoAlpha: 0, x: -48, clipPath: "inset(0 18% 0 0)" }, { duration: 0.85 });
   revealGroup(".fleet", ".fleet-copy", { autoAlpha: 0, y: 38 }, { start: "top 68%" });
   revealGroup(".heritage", ".heritage .year", { autoAlpha: 0, x: -70 }, { duration: 0.9 });
   revealGroup(".heritage", ".heritage-copy", { autoAlpha: 0, y: 34 }, { start: "top 68%" });
@@ -204,7 +203,6 @@ function startGsapAnimations() {
   revealGroup(".trust", ".trust-intro", { autoAlpha: 0, x: -34 });
   revealGroup(".faq", ".faq-intro", { autoAlpha: 0, x: -34 });
   revealGroup(".faq", ".accordion", { autoAlpha: 0, y: 34 }, { start: "top 72%" });
-  revealGroup(".final-cta", ".final-cta .container", { autoAlpha: 0, y: 38, clipPath: "inset(12% 0 12% 0)" });
 
   gsap.fromTo(".route-lines span", { scaleX: 0, autoAlpha: 0 }, {
     scaleX: 1,
