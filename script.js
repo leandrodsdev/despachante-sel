@@ -105,15 +105,24 @@ window.addEventListener("resize", () => {
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const revealElements = [...document.querySelectorAll(".reveal")];
 const preloader = document.querySelector(".preloader");
+const preloaderStartedAt = performance.now();
+const PRELOADER_MIN_DURATION = 1200;
+let preloaderRemovalTimer;
 
-function removePreloader() {
+function removePreloader(immediate = false) {
   if (!preloader || !preloader.isConnected) return;
-  preloader.classList.add("is-hidden");
-  window.setTimeout(() => preloader.remove(), 650);
+  const elapsed = performance.now() - preloaderStartedAt;
+  const remaining = immediate ? 0 : Math.max(0, PRELOADER_MIN_DURATION - elapsed);
+
+  window.clearTimeout(preloaderRemovalTimer);
+  preloaderRemovalTimer = window.setTimeout(() => {
+    preloader.classList.add("is-hidden");
+    window.setTimeout(() => preloader.remove(), 650);
+  }, remaining);
 }
 
 // Rede de segurança: o preloader jamais deve impedir o acesso ao conteúdo.
-window.setTimeout(removePreloader, 4000);
+window.setTimeout(() => removePreloader(), 4000);
 
 function showAllContent() {
   revealElements.forEach((element) => element.classList.add("visible"));
@@ -149,7 +158,7 @@ function startGsapAnimations() {
   document.documentElement.classList.add("gsap-active");
 
   if (reducedMotion.matches) {
-    removePreloader();
+    removePreloader(true);
     showAllContent();
     gsap.set(".hero-image", { clearProps: "transform" });
     return;
