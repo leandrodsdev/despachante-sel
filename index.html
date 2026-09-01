@@ -30,23 +30,27 @@
   <meta name="twitter:image" content="https://despachantesel.com.br/assets/og-image.webp">
   <meta name="twitter:image:alt" content="Caminhão vermelho na estrada representando os serviços veiculares da SEL Marabá">
   <title>SEL Marabá | Despachante Veicular desde 1990</title>
-  <script>document.documentElement.classList.replace('no-js', 'js');</script>
+  <script>document.documentElement.classList.replace('no-js', 'js');document.documentElement.classList.add('is-loading');window.__selLoaderStart=performance.now();</script>
   <style>
-    /* Critical first paint: mantém o preloader centralizado antes do CSS externo. */
-    #sel-preloader{position:fixed!important;inset:0!important;z-index:9999;display:block!important;width:auto!important;height:auto!important;min-height:100vh;min-height:100svh;margin:0!important;background:#070707;color:#fff;overflow:hidden}
-    #sel-preloader .sel-loader-stage{position:absolute!important;inset:0!important;display:grid!important;place-content:center!important;justify-items:center!important;gap:28px;margin:0!important;padding:0!important;opacity:0!important;visibility:hidden!important;transform:none!important}
-    #sel-preloader.is-ready .sel-loader-stage{opacity:1!important;visibility:visible!important}
-    #sel-preloader .sel-loader-wordmark{position:relative!important;inset:auto!important;margin:0!important;font:700 clamp(3.4rem,8vw,6.2rem)/.9 Manrope,Arial,sans-serif;letter-spacing:-.04em;transform:none!important}
-    #sel-preloader .sel-loader-wordmark>span{position:absolute;top:-.02em;right:-.22em;width:.12em;aspect-ratio:1;border-radius:50%;background:#e5231f}
-    #sel-preloader .sel-loader-progress{position:relative!important;inset:auto!important;width:clamp(150px,24vw,260px);height:1px;margin:0!important;background:rgba(255,255,255,.18);overflow:hidden;transform:none!important}
-    #sel-preloader .sel-loader-progress i{display:block;width:100%;height:100%;background:#e5231f;transform:scaleX(0);transform-origin:left center}
+    html.is-loading,html.is-loading body{overflow:hidden!important}
+    .preloader{display:none}
+    .js .preloader{position:fixed;inset:0;z-index:9999;display:grid;place-items:center;width:100%;height:100%;height:100svh;min-height:100%;padding:max(20px,env(safe-area-inset-top)) max(20px,env(safe-area-inset-right)) max(20px,env(safe-area-inset-bottom)) max(20px,env(safe-area-inset-left));box-sizing:border-box;background:#070707;opacity:1;visibility:visible;overflow:hidden;contain:strict;isolation:isolate;transition:opacity .34s ease-out,visibility 0s linear .34s}
+    .js .preloader.is-leaving{opacity:0;visibility:hidden;pointer-events:none}
+    .preloader-content{display:flex;flex-direction:column;align-items:center;gap:22px;width:min(38vw,150px);max-width:150px;margin:0}
+    .preloader-logo{position:relative;color:#fff;font:700 clamp(2.25rem,10vw,3.25rem)/1 Arial,sans-serif;letter-spacing:-.075em;white-space:nowrap}
+    .preloader-logo::after{content:"";position:absolute;top:.05em;right:-.22em;width:.13em;height:.13em;border-radius:50%;background:#d92820}
+    .preloader-track{display:block;width:100%;height:2px;overflow:hidden;background:rgba(255,255,255,.18)}
+    .preloader-track>span{display:block;width:100%;height:100%;background:#d92820;transform:scaleX(0);transform-origin:left center;animation:selLoaderProgress 1.05s cubic-bezier(.22,1,.36,1) forwards}
+    @keyframes selLoaderProgress{to{transform:scaleX(1)}}
+    @media(max-height:420px){.preloader-content{gap:16px;width:min(32vw,130px)}}
+    @media(prefers-reduced-motion:reduce){.js .preloader{transition:none}.preloader-track>span{animation:none;transform:none}}
   </style>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
   <link rel="preload" href="assets/hero-caminhao.webp" as="image" type="image/webp" fetchpriority="high">
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&amp;family=Manrope:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css?v=10">
+  <link rel="stylesheet" href="styles.css?v=17">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -70,23 +74,14 @@
   </script>
 </head>
 <body>
-  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-
   <div class="preloader" id="sel-preloader" role="status" aria-label="Carregando SEL Marabá">
-    <div class="sel-loader-stage" aria-hidden="true">
-      <div class="sel-loader-wordmark">SEL<span></span></div>
-      <div class="sel-loader-progress"><i></i></div>
+    <div class="preloader-content" aria-hidden="true">
+      <span class="preloader-logo">SEL</span>
+      <span class="preloader-track"><span></span></span>
     </div>
   </div>
-  <script>
-    (function(){
-      var loader=document.getElementById('sel-preloader');
-      if(!loader)return;
-      requestAnimationFrame(function(){requestAnimationFrame(function(){loader.classList.add('is-ready')})});
-      window.__selPreloaderLeaveTimer=window.setTimeout(function(){loader.classList.add('is-leaving')},1450);
-      window.__selPreloaderTimer=window.setTimeout(function(){if(loader.isConnected)loader.remove()},2200);
-    })();
-  </script>
+  <script>window.__selLoaderFailsafe=setTimeout(function(){var loader=document.getElementById('sel-preloader');document.documentElement.classList.remove('is-loading');if(loader)loader.remove();},2800);</script>
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
 
   <header class="site-header" id="inicio">
     <div class="container nav-wrap">
@@ -143,28 +138,28 @@
           <p>Orientação em cada etapa para manter veículos e operações em movimento, com processos conduzidos de forma organizada.</p>
         </div>
         <div class="service-grid">
-          <article class="service-card featured reveal">
+          <article class="service-card featured reveal" id="licenciamento">
             <span class="card-number">01</span>
             <div class="card-icon" aria-hidden="true"><svg class="icon-arrow-up-right" viewBox="0 0 20 20" fill="none" aria-hidden="true"><path d="M5 15 15 5M7 5h8v8"/></svg></div>
             <div><h3>Licenciamento</h3><p>Regularização anual para seu veículo circular conforme as exigências vigentes.</p></div>
             <a class="card-link js-whatsapp" href="#contato" data-whatsapp-service="o serviço de Licenciamento" aria-label="Consultar sobre licenciamento">Consultar serviço <span>→</span></a>
           </article>
-          <article class="service-card reveal">
+          <article class="service-card reveal" id="transferencia">
             <span class="card-number">02</span><div class="card-icon" aria-hidden="true">⇄</div>
             <div><h3>Transferência</h3><p>Acompanhamento da mudança de propriedade de carros, motos e veículos pesados.</p></div>
             <a class="card-link js-whatsapp" href="#contato" data-whatsapp-service="o serviço de Transferência" aria-label="Consultar sobre transferência">Consultar serviço <span>→</span></a>
           </article>
-          <article class="service-card reveal">
+          <article class="service-card reveal" id="primeiro-emplacamento">
             <span class="card-number">03</span><div class="card-icon" aria-hidden="true">◇</div>
             <div><h3>Primeiro Emplacamento</h3><p>Suporte documental para colocar seu veículo novo em circulação.</p></div>
             <a class="card-link js-whatsapp" href="#contato" data-whatsapp-service="o serviço de Primeiro Emplacamento" aria-label="Consultar sobre primeiro emplacamento">Consultar serviço <span>→</span></a>
           </article>
-          <article class="service-card dark reveal">
+          <article class="service-card dark reveal" id="antt-aet">
             <span class="card-number">04</span><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M9 4.5h10l5 5V27.5H9z"/><path d="M19 4.5v5h5M13 15h7M13 19h7M13 23h5"/></svg></div>
             <div><h3>ANTT</h3><p>Orientação para registros e demandas ligados ao transporte rodoviário de cargas.</p></div>
             <a class="card-link js-whatsapp" href="#contato" data-whatsapp-service="o serviço relacionado à ANTT" aria-label="Consultar sobre ANTT">Consultar serviço <span>→</span></a>
           </article>
-          <article class="service-card red reveal">
+          <article class="service-card red reveal" id="aet">
             <span class="card-number">05</span><div class="card-icon" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M9 4.5h10l5 5V27.5H9z"/><path d="M19 4.5v5h5M13 15h7M13 19l2.5 2.5L21 16"/></svg></div>
             <div><h3>AET</h3><p>Suporte na Autorização Especial de Trânsito para operações que exigem análise específica.</p></div>
             <a class="card-link js-whatsapp" href="#contato" data-whatsapp-service="a Autorização Especial de Trânsito (AET)" aria-label="Consultar sobre AET">Consultar serviço <span>→</span></a>
@@ -272,7 +267,7 @@
     <div class="container footer-top">
       <a class="brand brand-footer" href="#inicio" aria-label="SEL Marabá — voltar ao início"><span class="brand-mark" aria-hidden="true">SEL</span><span class="brand-copy">Despachante<br>Veicular</span></a>
       <div><p class="footer-label">Navegação</p><a href="#servicos">Serviços</a><a href="#empresas">Empresas e frotas</a><a href="#sobre">Nossa história</a><a href="#faq">Dúvidas</a></div>
-      <div><p class="footer-label">Serviços</p><a href="#servicos">Licenciamento</a><a href="#servicos">Transferência</a><a href="#servicos">Primeiro Emplacamento</a><a href="#servicos">ANTT e AET</a></div>
+      <div><p class="footer-label">Serviços</p><a href="#licenciamento">Licenciamento</a><a href="#transferencia">Transferência</a><a href="#primeiro-emplacamento">Primeiro Emplacamento</a><a href="#antt-aet">ANTT e AET</a></div>
       <div>
         <p class="footer-label">Atendimento</p>
         <p>Marabá e região</p>
@@ -290,6 +285,6 @@
   <div class="toast" role="status" aria-live="polite"></div>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js" defer></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js" defer></script>
-  <script src="script.js?v=10" defer></script>
+  <script src="script.js?v=17" defer></script>
 </body>
 </html>

@@ -3,6 +3,49 @@
 const WHATSAPP_NUMBER = "5594991559540";
 const WHATSAPP_MESSAGE = "Olá! Vim pelo site da SEL Marabá e gostaria de orientação sobre documentação veicular.";
 
+const preloader = document.getElementById("sel-preloader");
+const loaderStartedAt = window.__selLoaderStart || performance.now();
+let preloaderFinished = false;
+let siteStarted = false;
+
+function startSite() {
+  if (siteStarted) return;
+  siteStarted = true;
+  startGsapAnimations();
+
+  if (window.ScrollTrigger) {
+    window.requestAnimationFrame(() => window.ScrollTrigger.refresh(true));
+  }
+}
+
+function finishPreloader() {
+  if (!preloader || preloaderFinished) return;
+  preloaderFinished = true;
+  window.clearTimeout(window.__selLoaderFailsafe);
+
+  const minimumVisibleTime = 850;
+  const elapsed = performance.now() - loaderStartedAt;
+  const remaining = Math.max(0, minimumVisibleTime - elapsed);
+
+  window.setTimeout(() => {
+    preloader.classList.add("is-leaving");
+    const exitDuration = window.matchMedia("(prefers-reduced-motion: reduce)").matches ? 0 : 380;
+
+    window.setTimeout(() => {
+      preloader.remove();
+      document.documentElement.classList.remove("is-loading");
+      window.requestAnimationFrame(() => window.requestAnimationFrame(startSite));
+    }, exitDuration);
+  }, remaining);
+}
+
+if (document.readyState === "complete") {
+  finishPreloader();
+} else {
+  window.addEventListener("load", finishPreloader, { once: true });
+  window.setTimeout(finishPreloader, 2400);
+}
+
 function getWhatsappMessage(link) {
   const service = link.dataset.whatsappService;
   if (!service) return WHATSAPP_MESSAGE;
@@ -38,23 +81,6 @@ whatsappLinks.forEach((link) => {
     link.href = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(getWhatsappMessage(link))}`;
     link.target = "_blank";
     link.rel = "noopener noreferrer";
-  });
-});
-
-document.querySelectorAll('a[href^="#"]:not(.skip-link)').forEach((link) => {
-  link.addEventListener("click", (event) => {
-    const hash = link.getAttribute("href");
-    if (!hash || hash === "#" || !hash.startsWith("#")) return;
-
-    const target = document.querySelector(hash);
-    if (!target) return;
-
-    event.preventDefault();
-    target.scrollIntoView({
-      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-      block: "start"
-    });
-    history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
   });
 });
 
@@ -104,30 +130,6 @@ window.addEventListener("resize", () => {
 
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const revealElements = [...document.querySelectorAll(".reveal")];
-const preloader = document.querySelector(".preloader");
-const PRELOADER_DURATION = 1800;
-let preloaderRemovalTimer;
-
-function removePreloader(immediate = false, onComplete) {
-  if (!preloader || !preloader.isConnected) {
-    if (onComplete) onComplete();
-    return;
-  }
-
-  const remaining = immediate ? 0 : Math.max(0, PRELOADER_DURATION - performance.now());
-
-  window.clearTimeout(preloaderRemovalTimer);
-  preloaderRemovalTimer = window.setTimeout(() => {
-    window.clearTimeout(window.__selPreloaderTimer);
-    window.clearTimeout(window.__selPreloaderLeaveTimer);
-    preloader.classList.add("is-hidden");
-    preloader.remove();
-    if (onComplete) onComplete();
-  }, remaining);
-}
-
-// Rede de segurança: o preloader jamais deve impedir o acesso ao conteúdo.
-window.setTimeout(() => removePreloader(), 4000);
 
 function showAllContent() {
   revealElements.forEach((element) => element.classList.add("visible"));
@@ -153,17 +155,16 @@ function startFallbackReveals() {
 
 function startGsapAnimations() {
   if (!window.gsap || !window.ScrollTrigger) {
-    removePreloader();
     startFallbackReveals();
     return;
   }
 
   const { gsap, ScrollTrigger } = window;
   gsap.registerPlugin(ScrollTrigger);
+  ScrollTrigger.config({ ignoreMobileResize: true, limitCallbacks: true });
   document.documentElement.classList.add("gsap-active");
 
   if (reducedMotion.matches) {
-    removePreloader(true);
     showAllContent();
     gsap.set(".hero-image", { clearProps: "transform" });
     return;
@@ -183,8 +184,6 @@ function startGsapAnimations() {
   if (document.querySelector(".scroll-cue")) {
     heroTimeline.fromTo(".scroll-cue", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.45 }, 0.72);
   }
-
-  removePreloader();
 
   function revealGroup(trigger, targets, from, options = {}) {
     const items = gsap.utils.toArray(targets);
@@ -278,5 +277,5 @@ function startGsapAnimations() {
   });
 }
 
-startGsapAnimations();
+if (!preloader) startSite();
 document.getElementById("year").textContent = new Date().getFullYear();
