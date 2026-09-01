@@ -105,19 +105,22 @@ window.addEventListener("resize", () => {
 const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
 const revealElements = [...document.querySelectorAll(".reveal")];
 const preloader = document.querySelector(".preloader");
-const preloaderStartedAt = performance.now();
-const PRELOADER_MIN_DURATION = 1200;
+const PRELOADER_DURATION = 1800;
 let preloaderRemovalTimer;
 
-function removePreloader(immediate = false) {
-  if (!preloader || !preloader.isConnected) return;
-  const elapsed = performance.now() - preloaderStartedAt;
-  const remaining = immediate ? 0 : Math.max(0, PRELOADER_MIN_DURATION - elapsed);
+function removePreloader(immediate = false, onComplete) {
+  if (!preloader || !preloader.isConnected) {
+    if (onComplete) onComplete();
+    return;
+  }
+
+  const remaining = immediate ? 0 : Math.max(0, PRELOADER_DURATION - performance.now());
 
   window.clearTimeout(preloaderRemovalTimer);
   preloaderRemovalTimer = window.setTimeout(() => {
     preloader.classList.add("is-hidden");
-    window.setTimeout(() => preloader.remove(), 650);
+    preloader.remove();
+    if (onComplete) onComplete();
   }, remaining);
 }
 
@@ -179,25 +182,7 @@ function startGsapAnimations() {
     heroTimeline.fromTo(".scroll-cue", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.45 }, 0.72);
   }
 
-  if (preloader) {
-    const loaderTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
-    loaderTimeline
-      .fromTo(".preloader-mark", { autoAlpha: 0, y: 18 }, { autoAlpha: 1, y: 0, duration: 0.42 })
-      .fromTo(".preloader-mark > span", { scale: 0.35, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 0.32, ease: "back.out(2)" }, 0.18)
-      .fromTo(".preloader-track i", { scaleX: 0 }, { scaleX: 1, duration: 0.72, ease: "power2.inOut" }, 0.2)
-      .to(".preloader-inner", { autoAlpha: 0, y: -18, duration: 0.25 }, 0.82)
-      .to(preloader, {
-        yPercent: -100,
-        duration: 0.62,
-        ease: "power4.inOut",
-        onComplete: () => {
-          preloader.remove();
-          heroTimeline.play(0);
-        }
-      }, 0.92);
-  } else {
-    heroTimeline.play(0);
-  }
+  removePreloader(false, () => heroTimeline.play(0));
 
   function revealGroup(trigger, targets, from, options = {}) {
     const items = gsap.utils.toArray(targets);
