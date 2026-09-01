@@ -170,21 +170,6 @@ function startGsapAnimations() {
     return;
   }
 
-  const heroTimeline = gsap.timeline({ defaults: { ease: "power3.out" } });
-  heroTimeline
-    .fromTo(".hero-image", { scale: 1.07 }, { scale: 1, duration: 1.6 })
-    .fromTo(".site-header", { autoAlpha: 0, y: -16 }, { autoAlpha: 1, y: 0, duration: 0.55, clearProps: "transform" }, 0.12)
-    .fromTo(
-      [".hero .eyebrow", ".hero h1", ".hero-text", ".hero-actions", ".hero-meta"],
-      { autoAlpha: 0, y: 28, clipPath: "inset(0 0 18% 0)" },
-      { autoAlpha: 1, y: 0, clipPath: "inset(0 0 0% 0)", duration: 0.72, stagger: 0.09 },
-      0.18
-    );
-
-  if (document.querySelector(".scroll-cue")) {
-    heroTimeline.fromTo(".scroll-cue", { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.45 }, 0.72);
-  }
-
   function revealGroup(trigger, targets, from, options = {}) {
     const items = gsap.utils.toArray(targets);
     if (!items.length) return;
